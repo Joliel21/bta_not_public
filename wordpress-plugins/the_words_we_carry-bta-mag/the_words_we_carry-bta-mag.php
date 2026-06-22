@@ -3,7 +3,7 @@
  * Plugin Name: The Words We Carry BTA Mag
  * Plugin URI:  https://breathtakingawareness.com/
  * Description: Renamed lightweight display shell for The Words We Carry / BTA magazine reader. Loads the reader assets and connects to separate content, ads, and analytics plugins/endpoints.
- * Version:     3.1.3
+ * Version:     3.1.4
  * Author:      Breathtaking Awareness
  * License:     GPL-2.0+
  * Text Domain: the-words-we-carry-bta-mag
@@ -47,7 +47,7 @@ if ( ! defined( 'WPINC' ) ) {
  * - Do not move this plugin source to public GitHub. Private backup/private GitHub only.
  */
 
-define( 'TWWC_BTA_MAG_READER_DISPLAY_VERSION', '3.1.3' );
+define( 'TWWC_BTA_MAG_READER_DISPLAY_VERSION', '3.1.4' );
 define( 'TWWC_BTA_MAG_READER_DISPLAY_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'TWWC_BTA_MAG_READER_DISPLAY_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TWWC_BTA_MAG_READER_DISPLAY_SCRIPT_HANDLE', 'the-words-we-carry-bta-mag-script' );
@@ -75,7 +75,7 @@ define(
 
 define(
 	'TWWC_BTA_MAG_READER_DISPLAY_DEFAULT_MAGAZINE_MANIFEST_URL',
-	'https://raw.githubusercontent.com/Joliel21/bta_public/main/public/content/magazine-manifest.json'
+	'https://raw.githubusercontent.com/Joliel21/bta_public/main/public/content/issue.json'
 );
 
 define(
@@ -140,7 +140,15 @@ function twwc_bta_mag_reader_display_get_settings() {
 		$saved = array();
 	}
 
-	return wp_parse_args( $saved, twwc_bta_mag_reader_display_default_settings() );
+	$settings = wp_parse_args( $saved, twwc_bta_mag_reader_display_default_settings() );
+
+	// The old public content/magazine-manifest.json file no longer exists.
+	// Route that legacy setting to the current issue.json to avoid a frontend 404.
+	if ( ! empty( $settings['magazine_manifest_url'] ) && false !== strpos( $settings['magazine_manifest_url'], '/content/magazine-manifest.json' ) ) {
+		$settings['magazine_manifest_url'] = $settings['issue_url'];
+	}
+
+	return $settings;
 }
 
 function twwc_bta_mag_reader_display_register_settings() {
