@@ -2416,7 +2416,12 @@ export const ArticleTextLayout = ({
         {...props}
       />
     ),
-    hr: () => <span className="block h-6"></span>,
+    hr: () => (
+      <div
+        aria-hidden="true"
+        className="my-5 h-px w-full bg-[#AF9355]/55"
+      />
+    ),
     img: ({ node, ...props }: any) => (
       <img
         className="w-full h-auto max-h-[300px] object-cover my-6"
@@ -2534,7 +2539,12 @@ export const ArticleTextLayout = ({
         {...props}
       />
     ),
-    hr: () => <span className="block h-6"></span>,
+    hr: () => (
+      <div
+        aria-hidden="true"
+        className="my-5 h-px w-full bg-[#AF9355]/55"
+      />
+    ),
     img: ({ node, ...props }: any) => (
       <img
         className="w-full h-auto max-h-[300px] object-cover my-6"
