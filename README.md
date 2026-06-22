@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/29192666/README.md)
 # BTA Not Public
 
 Private source repository for The Words We Carry / BTA magazine system.
