@@ -218,6 +218,46 @@ const fetchActiveAdsPayload = async () => {
   }
 };
 
+const isPlainObject = (value: unknown): value is Record<string, any> =>
+  !!value && typeof value === "object" && !Array.isArray(value);
+
+const firstString = (...values: unknown[]) => {
+  for (const value of values) {
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+  return "";
+};
+
+const imageUrlFromRecord = (value: unknown) => {
+  if (typeof value === "string") return value.trim();
+  if (!isPlainObject(value)) return "";
+
+  return firstString(
+    value.url,
+    value.src,
+    value.imageUrl,
+    value.fileUrl,
+    value.fullUrl,
+    value.sourceUrl,
+    value.guid,
+    value.filename,
+  );
+};
+
+const normalizeChapterDescriptionsPayload = (value: unknown) => {
+  if (Array.isArray(value)) {
+    return value.reduce((map: Record<string, any>, item: any) => {
+      const slug = firstString(item?.slug, item?.id, item?.chapterSlug);
+      if (slug) map[slug] = item;
+      return map;
+    }, {});
+  }
+
+  return isPlainObject(value) ? value : {};
+};
+
 const createAdMarkdown = (ad: any) => {
   const lines = [
     ad.sponsorDisclosure || "Sponsored placement",
@@ -1691,7 +1731,14 @@ function App() {
           articlesRaw = wordpressPayload.articles || wordpressPayload.pages || [];
           chaptersRaw = wordpressPayload.chapters || [];
           frontMatterRaw = wordpressPayload.frontMatter || { pages: [] };
-          chapterDescriptionsRaw = wordpressPayload.chapterDescriptions || {};
+          chapterDescriptionsRaw = normalizeChapterDescriptionsPayload(
+            wordpressPayload.chapterDescriptions || {},
+          );
+          magazineManifestRaw =
+            wordpressPayload.magazineManifest ||
+            wordpressPayload.issueJson ||
+            wordpressPayload.githubIssue ||
+            null;
         } else {
           const issueRes = await fetchNoStore(ISSUE_URL);
 
@@ -1772,13 +1819,13 @@ function App() {
 
           if (!magazineManifestRaw) {
             try {
-              const magazineManifestRes = await fetchNoStore(MAGAZINE_MANIFEST_URL);
+              const magazineManifestRes = await fetchNoStore(ISSUE_URL);
               magazineManifestRaw = magazineManifestRes.ok
                 ? await magazineManifestRes.json()
                 : null;
             } catch (magazineManifestErr) {
               console.warn(
-                "Magazine manifest could not be loaded. Back-matter placement will use generated content only.",
+                "GitHub issue.json shell could not be loaded. Back-matter placement will use generated content only.",
                 magazineManifestErr,
               );
               magazineManifestRaw = null;
@@ -2088,11 +2135,11 @@ ${chapterDescription.body}`,
           };
 
           const resolveAssetUrl = (
-            src: string,
+            src: unknown,
             articleRecord?: any,
           ) => {
-            let assetUrl = (src || "").trim();
-            if (!assetUrl) return assetUrl;
+            let assetUrl = imageUrlFromRecord(src);
+            if (!assetUrl) return "";
 
             if (
               /the[_-]weight[_-]of[_-]staying[_-]well/i.test(
@@ -2644,8 +2691,10 @@ ${chapterDescription.body}`,
             const articleImageRecord =
               Array.isArray(article.images) &&
               article.images.length > 0
-                ? article.images[0]
-                : null;
+                ? article.images.find((image: any) => imageUrlFromRecord(image)) || article.images[0]
+                : isPlainObject(article.image)
+                  ? article.image
+                  : null;
 
             const normalizedArticleId = normalizeArticleKey(
               article.id || "",
@@ -2676,24 +2725,29 @@ ${chapterDescription.body}`,
                 (imgMatch
                   ? imgMatch[1]
                   : imageMetadata?.src ||
-                    article.image ||
-                    article.imageUrl ||
-                    article.coverImage ||
-                    articleImageRecord?.filename ||
+                    imageUrlFromRecord(article.image) ||
+                    imageUrlFromRecord(article.imageUrl) ||
+                    imageUrlFromRecord(article.coverImage) ||
+                    imageUrlFromRecord(articleImageRecord) ||
                     null);
             const imageAlt =
-              article.imageAlt ||
-              article.alt ||
-              imageMetadata?.alt ||
-              articleImageRecord?.alt ||
-              article.title ||
-              "Article image";
+              firstString(
+                article.imageAlt,
+                article.alt,
+                imageMetadata?.alt,
+                articleImageRecord?.alt,
+                articleImageRecord?.alternativeText,
+                articleImageRecord?.title,
+                article.title,
+              ) || "Article image";
             const imageCaption =
-              article.imageCaption ||
-              article.caption ||
-              imageMetadata?.caption ||
-              articleImageRecord?.caption ||
-              "";
+              firstString(
+                article.imageCaption,
+                article.caption,
+                imageMetadata?.caption,
+                articleImageRecord?.caption,
+                articleImageRecord?.description,
+              );
             const imageLinkUrl =
               article.imageLinkUrl ||
               article.imageUrlTarget ||
@@ -2701,7 +2755,7 @@ ${chapterDescription.body}`,
               "";
             const hasArticleImage = !!imageUrl;
 
-            if (imageUrl && typeof imageUrl === "string") {
+            if (imageUrl) {
               imageUrl = resolveAssetUrl(imageUrl, article);
             }
 
@@ -3987,6 +4041,7 @@ ${chapterDescription.body}`,
     const loadRuntimeCss = async () => {
       try {
         const cssUrl = getDataUrl("RUNTIME_CSS");
+        if (!cssUrl) return;
         const response = await fetch(cssUrl);
         if (
           response.ok &&
@@ -4012,6 +4067,7 @@ ${chapterDescription.body}`,
     const loadRuntimeJs = async () => {
       try {
         const jsUrl = getDataUrl("RUNTIME_JS");
+        if (!jsUrl) return;
         const response = await fetch(jsUrl);
         if (
           response.ok &&
