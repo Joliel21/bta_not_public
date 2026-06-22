@@ -1,0 +1,27 @@
+@import "./fonts.css";
+@import "./tailwind.css";
+@import "./theme.css";
+
+/* Reader viewport foundation.
+   Required for standalone/Figma/Vite previews: App uses h-full/w-full,
+   so html/body/#root must have a real viewport height. WordPress embeds
+   still use the plugin shell height. */
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  overscroll-behavior: none;
+}
+
+#root {
+  position: relative;
+}

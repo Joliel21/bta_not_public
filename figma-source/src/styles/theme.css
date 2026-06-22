@@ -1,0 +1,152 @@
+@theme {
+  --font-serif-primary: "DM Serif Display", serif;
+  --font-serif-secondary: "Lora", serif;
+  --font-sans-accent: "Montserrat", sans-serif;
+
+  --color-ivory: #f2efe8;
+  --color-charcoal: #2d2d2d;
+  --color-forest: #56602f;
+  --color-gold-muted: #c5b388;
+  --color-gold: #c6b07b;
+  --color-linen: #e7e3da;
+  --color-off-white: #f2efe8;
+
+  /* Type Scale Variables */
+  --text-kicker: 8pt;
+  --text-body: 11pt;
+  --text-minor-head: 16pt;
+  --text-subhead: 20pt;
+  --text-section-head: 25pt;
+  --text-feature-head: 32pt;
+  --text-major-opener: 40pt;
+  --text-prestige-opener: 48pt;
+}
+
+:root {
+  --bg-page: var(--color-ivory);
+  --text-primary: var(--color-charcoal);
+
+  /* Layout Constants */
+  --page-width: 480px;
+  --page-height: 660px;
+  --margin-top: 60px;
+  --margin-bottom: 40px;
+  --margin-outer: 48px;
+  --margin-inner: 56px;
+  --col-gap: 14px;
+  --col-width-single: 360px;
+  --col-width-double: 173px;
+}
+
+body {
+  font-family: var(--font-serif-secondary);
+  color: var(--text-primary);
+  background-color: #000000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif-primary);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+
+.prose p {
+  line-height: 1.5;
+  margin-bottom: 1.5em;
+  font-family: var(--font-serif-secondary);
+  font-size: var(--text-body);
+}
+
+/* Typography Hierarchy Utility Classes - LOCKED SCALE */
+
+/* 48pt - Prestige Opener */
+.type-prestige-opener {
+  font-family: var(--font-serif-primary);
+  font-size: var(--text-prestige-opener);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+/* 40pt - Major Opener */
+.type-major-opener {
+  font-family: var(--font-serif-primary);
+  font-size: var(--text-major-opener);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+/* 32pt - Feature Head (Standard Article Opener) */
+.type-feature-head {
+  font-family: var(--font-serif-primary);
+  font-size: var(--text-feature-head);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+/* 25pt - Section Head */
+.type-section-head {
+  font-family: var(--font-serif-primary);
+  font-size: var(--text-section-head);
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+/* 20pt - Subhead */
+.type-subhead {
+  font-family: var(--font-serif-primary);
+  font-size: var(--text-subhead);
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+/* 16pt - Minor Head */
+.type-minor-head {
+  font-family: var(--font-serif-primary);
+  font-size: var(--text-minor-head);
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+/* 10pt - Body */
+.type-body {
+  font-family: var(--font-serif-secondary);
+  font-size: var(--text-body);
+  line-height: 1.5;
+}
+
+/* 9pt - Kicker */
+.type-kicker {
+  font-family: var(--font-sans-accent);
+  font-size: var(--text-kicker);
+  line-height: 1.2;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+/* Caption - derived from body or kicker? User didn't specify. 
+   Keeping a small caption size for utility, but maybe mapping to kicker size?
+   User said "LOCKED BASE... Everything scales from that".
+   I will set caption to 8pt (0.8 of base) if needed, but user listed 9pt as smallest.
+   I'll make caption 9pt (Kicker size) or just keep it 8.5pt if critical, 
+   but strictly speaking, I should probably stick to the scale. 
+   Let's use 9pt for caption too, or 8pt (which is 10 * 0.8). 
+   User didn't list 8pt. 
+   "Kicker 9pt (0.9)". 
+   I will use 9pt for caption to be safe or leave as is if not used prominently.
+   Actually, I'll update .type-caption to use 9pt to be safe within the "No improvisation" rule, 
+   or maybe just remove it if not used. I'll leave it as 9pt.
+*/
+.type-caption {
+  font-family: var(--font-sans-accent);
+  font-size: var(--text-kicker);
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+}
