@@ -75,7 +75,8 @@ export const DATA_SOURCE_CONFIG = {
       "https://raw.githubusercontent.com/Joliel21/bta_public/main/public/content/chapter-descriptions.json",
     MAGAZINE_MANIFEST_JSON:
       "https://raw.githubusercontent.com/Joliel21/bta_public/main/public/content/magazine-manifest.json",
-    WORDPRESS_MAGAZINE_JSON: "",
+    WORDPRESS_MAGAZINE_JSON:
+      "https://breathtakingawareness.com/wp-json/the-words-we-carry-content/v1/magazine",
     LEGACY_WORDPRESS_MAGAZINE_JSON: "",
     ADS_URL: "",
     ANALYTICS_URL: "",
@@ -95,7 +96,8 @@ export const DATA_SOURCE_CONFIG = {
     CHAPTER_DESCRIPTIONS_JSON:
       "/content/chapter-descriptions.json",
     MAGAZINE_MANIFEST_JSON: "/content/magazine-manifest.json",
-    WORDPRESS_MAGAZINE_JSON: "",
+    WORDPRESS_MAGAZINE_JSON:
+      "https://breathtakingawareness.com/wp-json/the-words-we-carry-content/v1/magazine",
     LEGACY_WORDPRESS_MAGAZINE_JSON: "",
     ADS_URL: "",
     ANALYTICS_URL: "",
