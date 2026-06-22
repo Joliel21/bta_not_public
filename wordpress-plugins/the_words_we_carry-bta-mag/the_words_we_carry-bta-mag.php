@@ -3,7 +3,7 @@
  * Plugin Name: The Words We Carry BTA Mag
  * Plugin URI:  https://breathtakingawareness.com/
  * Description: Renamed lightweight display shell for The Words We Carry / BTA magazine reader. Loads the reader assets and connects to separate content, ads, and analytics plugins/endpoints.
- * Version:     3.1.0
+ * Version:     3.1.3
  * Author:      Breathtaking Awareness
  * License:     GPL-2.0+
  * Text Domain: the-words-we-carry-bta-mag
@@ -47,7 +47,7 @@ if ( ! defined( 'WPINC' ) ) {
  * - Do not move this plugin source to public GitHub. Private backup/private GitHub only.
  */
 
-define( 'TWWC_BTA_MAG_READER_DISPLAY_VERSION', '3.1.0' );
+define( 'TWWC_BTA_MAG_READER_DISPLAY_VERSION', '3.1.3' );
 define( 'TWWC_BTA_MAG_READER_DISPLAY_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'TWWC_BTA_MAG_READER_DISPLAY_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TWWC_BTA_MAG_READER_DISPLAY_SCRIPT_HANDLE', 'the-words-we-carry-bta-mag-script' );
